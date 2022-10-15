@@ -70,7 +70,7 @@ signs_list = [sign for sign in signs_set]
 chars_list = [char for char in chars_set]
 stat_data = np.zeros((len(chars_list), len(signs_list)))
 for i, line in enumerate(dataset):
-    print(f"{i}/{len(dataset)}\n")
+    # print(f"{i}/{len(dataset)}\n")
     sign = line[1]
     text = str(line[2])
     text = text.split(' ')
@@ -82,7 +82,7 @@ for i, line in enumerate(dataset):
         y = signs_list.index(sign)
         stat_data[x][y] += 1
 
-print(stat_data)
+# print(stat_data)
 
 np.save('parsedArrays/stat_data.npy', stat_data)
 np.save('parsedArrays/signs_list.npy', signs_list)
