@@ -1,3 +1,5 @@
+open('Astrology-ml/text.csv', 'w').close()
+
 with open('Astrology-ml/horoscopes.csv', 'r', encoding="utf8") as fread, open('Astrology-ml/text.csv', 'a', encoding="utf8") as fwrite:
     count = 0
     for line in fread.readlines():
