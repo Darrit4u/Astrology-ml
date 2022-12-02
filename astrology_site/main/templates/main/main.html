@@ -1,0 +1,13 @@
+<form action="{% url 'main' %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>Введите ваш знак зодиака: </h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <input type="text" name="sign" id="sign">
+</fieldset>
+<input type="submit" value="Сгенерировать">
+</form>
+
+{% if result %}
+<label>{{ result }}</label>
+{% endif %}
