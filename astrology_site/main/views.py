@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render
 from langdetect import detect
 
@@ -5,11 +7,7 @@ from .adapter import AdapterML
 
 
 def parse_ml_output(text: str, sign: str) -> str:
-    print(text)
-    print(sign)
-    print(sign in text)
     text = text.replace(f'{sign}', f'{sign}: ')
-    print(text)
     text = text.replace('[SG]', '')
     text = text.replace('[EG]', '')
     text = text.split('"')
@@ -18,9 +16,10 @@ def parse_ml_output(text: str, sign: str) -> str:
 
 def check_input(text: str) -> bool:
     if text.isalpha():
-        details = detect(text)
-        if details == 'ru' or details == 'bg':
-            return True
+        return True
+        # details = detect(text)
+        # if details == 'ru' or details == 'bg':
+        #     return True
     return False
 
 
@@ -29,6 +28,8 @@ def index(request):
     if request.method == 'POST':
         input_sign = request.POST['sign']
         if check_input(input_sign):
+            if not os.path.exists(f"./checkpoint-24500"):
+                return render(request, 'main/main.html', {'result': 'Какое-то рандомное предсказание'})
             sign = f"[SG]{request.POST['sign']} "
             ml = AdapterML('checkpoint-24500')
             result = parse_ml_output(ml.generate(sign), sign)
