@@ -1,9 +1,10 @@
 import os
 
 from django.shortcuts import render
-from langdetect import detect
 
 from .adapter import AdapterML
+
+sign_list = ['Водолей', 'Рыбы', 'Овен', 'Телец', 'Близнецы', 'Рак', 'Лев', 'Дева', 'Весы', 'Скорпион', 'Стрелец', 'Козерог']
 
 
 def parse_ml_output(text: str, sign: str) -> str:
@@ -26,15 +27,11 @@ def check_input(text: str) -> bool:
 def index(request):
     result = ''
     if request.method == 'POST':
-        input_sign = request.POST['sign']
-        if check_input(input_sign):
-            if not os.path.exists(f"./checkpoint-24500"):
-                return render(request, 'main/main.html', {'result': 'Какое-то рандомное предсказание'})
-            sign = f"[SG]{request.POST['sign']} "
-            ml = AdapterML('checkpoint-24500')
-            result = parse_ml_output(ml.generate(sign), sign)
-            return render(request, 'main/main.html', {'result': result})
-        error_mes = 'Пожалуйста, введите ваш знак зодиака на русском языке и буквам'
-        return render(request, 'main/main.html', {'error_message': error_mes, 'result': result})
+        sign = f"[SG]{list(request.POST)[1]} "
+        if not os.path.exists(f"./checkpoint-24500"):
+            return render(request, 'main/main.html', {'result': 'Какое-то рандомное предсказание'})
+        ml = AdapterML('checkpoint-24500')
+        result = parse_ml_output(ml.generate(sign), sign)
+        return render(request, 'main/main.html', {'result': result})
 
     return render(request, 'main/main.html', {'result': result})
